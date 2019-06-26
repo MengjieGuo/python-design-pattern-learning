@@ -1,5 +1,9 @@
 # 单例模式实现日志记录
 
+################################################
+# 使用嵌套类实现单例模式
+################################################
+
 
 class SingletonLogging(object):
     class __SingletonLoggingReal():
@@ -7,32 +11,36 @@ class SingletonLogging(object):
             self.value = None
 
         # 指向单例对象的指针，是一个类属性
-        instance = None
+    instance = None
 
-        def __new__(cls):
-            # 如果没有实例化对象，就实例化
-            if SingletonLogging.instance is None:
-                SingletonLogging.instance = SingletonLogging.__SingletonLoggingReal()
-                return SingletonLogging.instance
+    def __new__(cls):
+        # 如果没有实例化对象，就实例化
+        if SingletonLogging.instance is None:
+            SingletonLogging.instance = SingletonLogging.__SingletonLoggingReal()
+        return SingletonLogging.instance
 
-        # def __getattr__(self, item):
-        #     return getattr(self.instance, item)
-        #
-        # def __setattr__(self, value):
-        #     return setattr(self.instance, value)
+    def __getattr__(self, item):
+        return getattr(self.instance, item)
+
+    def __setattr__(self, key, value):
+        return setattr(self.instance, key, value)
 
 
 def test_singleton1():
     obj1 = SingletonLogging()
-    obj1.value = 'i am 1'
+    obj1.not_exist_key = 'i am 1'
 
-    print(obj1, obj1.value)
+    print(obj1.not_exist_key)
+    print(obj1.value)
 
     obj2 = SingletonLogging()
-    obj2.value = 'i am 2'
+    obj2.not_exist_key = 'i am 2'
 
-    print(obj1, obj1.value)
-    print(obj2, obj2.value)
+    print(obj1.not_exist_key)
+    print(obj2.not_exist_key)
+
+    print(obj1, obj2)
+    print(obj1 is obj2)
 
 # 下面有三种实现单例的方式
 # 这里是参考
@@ -127,7 +135,7 @@ def test_singleton_origin():
 
 if __name__ == '__main__':
     """"""
-    # test_singleton1 # ❌
-    test_singleton2() # ✅
+    # test_singleton1() # ✅
+    # test_singleton2() # ✅
     # test_singleton_decorator() # ✅
     # test_singleton_origin() # ❌
